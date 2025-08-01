@@ -15,7 +15,7 @@ import model
 import push
 import train_and_test as tnt
 import save
-from log import create_logger
+import log as log_module
 from preprocess import mean, std, preprocess_input_function
 
 parser = argparse.ArgumentParser()
@@ -99,7 +99,7 @@ shutil.copy(src=os.path.join(os.getcwd(), base_architecture_type + '_features.py
 shutil.copy(src=os.path.join(os.getcwd(), 'model.py'), dst=model_dir)
 shutil.copy(src=os.path.join(os.getcwd(), 'train_and_test.py'), dst=model_dir)
 
-log, logclose = create_logger(log_filename=os.path.join(model_dir, 'train.log'))
+log, logclose = log_module.create_logger(log_filename=os.path.join(model_dir, 'train.log'))
 img_dir = os.path.join(model_dir, 'img')
 makedir(img_dir)
 weight_matrix_filename = 'outputL_weights'
