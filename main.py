@@ -17,11 +17,21 @@ import train_and_test as tnt
 import save
 from preprocess import mean, std, preprocess_input_function
 
-# Import local log module explicitly
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import log as log_module
+# Define logger function inline to avoid import conflicts
+def create_logger(log_filename, display=True):
+    f = open(log_filename, 'a')
+    counter = [0]
+    # this function will still have access to f after create_logger terminates
+    def logger(text):
+        if display:
+            print(text)
+        f.write(text + '\n')
+        counter[0] += 1
+        if counter[0] % 10 == 0:
+            f.flush()
+            os.fsync(f.fileno())
+        # Question: do we need to flush()
+    return logger, f.close
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-gpuid', nargs=1, type=str, default='0') # python3 main.py -gpuid=0,1,2,3
@@ -104,7 +114,7 @@ shutil.copy(src=os.path.join(os.getcwd(), base_architecture_type + '_features.py
 shutil.copy(src=os.path.join(os.getcwd(), 'model.py'), dst=model_dir)
 shutil.copy(src=os.path.join(os.getcwd(), 'train_and_test.py'), dst=model_dir)
 
-log, logclose = log_module.create_logger(log_filename=os.path.join(model_dir, 'train.log'))
+log, logclose = create_logger(log_filename=os.path.join(model_dir, 'train.log'))
 img_dir = os.path.join(model_dir, 'img')
 makedir(img_dir)
 weight_matrix_filename = 'outputL_weights'
