@@ -15,8 +15,13 @@ import model
 import push
 import train_and_test as tnt
 import save
-import log as log_module
 from preprocess import mean, std, preprocess_input_function
+
+# Import local log module explicitly
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import log as log_module
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-gpuid', nargs=1, type=str, default='0') # python3 main.py -gpuid=0,1,2,3
