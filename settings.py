@@ -18,9 +18,9 @@ train_dir = data_path + 'train/'
 # Full set: train & test
 test_dir = data_path + 'test/'
 train_push_dir = data_path + 'train/'
-train_batch_size = 80
-test_batch_size = 100
-train_push_batch_size = 75
+train_batch_size = 32
+test_batch_size = 32
+train_push_batch_size = 32
 
 joint_optimizer_lrs = {'features': 1e-4,
                        'add_on_layers': 3e-3,
