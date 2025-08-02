@@ -6,12 +6,12 @@ from torchsummary import summary
 model_urls = {
     'resnet18': 'https://download.pytorch.org/models/resnet18-5c106cde.pth',
     'resnet34': 'https://download.pytorch.org/models/resnet34-333f7ec4.pth',
-    'resnet50': 'https://drive.google.com/file/d/1yY9LcLN7bVy7CmH77Mc4TfmW7qT00oS9/view?usp=sharing',
+    'resnet50': 'https://download.pytorch.org/models/resnet50-19c8e357.pth',
+    # 'resnet50': 'https://drive.google.com/file/d/1yY9LcLN7bVy7CmH77Mc4TfmW7qT00oS9/view?usp=sharing',
     'resnet50_noinat': 'https://drive.google.com/file/d/1yY9LcLN7bVy7CmH77Mc4TfmW7qT00oS9/view?usp=sharing',
     'resnet101': 'https://download.pytorch.org/models/resnet101-5d3b4d8f.pth',
     'resnet152': 'https://download.pytorch.org/models/resnet152-b121ed2d.pth',
 }
-#'resnet50': 'https://download.pytorch.org/models/resnet50-19c8e357.pth',
 
 model_dir = './pretrained_models'
 
@@ -264,15 +264,21 @@ def resnet50_features(pretrained=False, inat=False, **kwargs):
     model = ResNet_features(Bottleneck, [3, 4, 6, 4], **kwargs)
     if pretrained:
         if inat:
+            # Load iNaturalist model from local file
             my_dict = torch.load(model_dir + '/' + 'BBN.iNaturalist2017.res50.90epoch.best_model.pth')
+            # iNaturalist-specific processing
+            my_dict.pop('module.classifier.weight', None)
+            my_dict.pop('module.classifier.bias', None)
+            for key in list(my_dict.keys()):
+                my_dict[key.replace('module.backbone.', '').replace('cb_block', 'layer4.2').replace('rb_block','layer4.3')] = my_dict.pop(key)
+            model.load_state_dict(my_dict, strict=True)
         else:
-            my_dict = torch.load(model_dir + '/' + 'resnet50-0676ba61.pth')
-        
-        my_dict.pop('module.classifier.weight')
-        my_dict.pop('module.classifier.bias')
-        for key in list(my_dict.keys()):
-            my_dict[key.replace('module.backbone.', '').replace('cb_block', 'layer4.2').replace('rb_block','layer4.3' )] = my_dict.pop(key)
-        model.load_state_dict(my_dict, strict=True)
+            # Download and load standard PyTorch ResNet50
+            my_dict = model_zoo.load_url(model_urls['resnet50'], model_dir=model_dir)
+            # Standard ResNet processing - only remove fc layers
+            my_dict.pop('fc.weight', None)
+            my_dict.pop('fc.bias', None)
+            model.load_state_dict(my_dict, strict=False)
 
     return model
 
