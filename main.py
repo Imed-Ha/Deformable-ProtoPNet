@@ -129,6 +129,8 @@ normalize = transforms.Normalize(mean=mean,
 
 if 'stanford_dogs' in train_dir:
     num_classes = 120
+elif 'glaucoma_dataset' in train_dir:
+    num_classes = 2
 else:
     num_classes = 200
 log("{} classes".format(num_classes))
