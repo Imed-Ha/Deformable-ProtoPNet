@@ -11,14 +11,14 @@ data_path = './datasets/CUB_200_2011/'
 if 'stanford_dogs' in data_path:
     num_classes = 120
 else:
-    num_classes = 200
+    num_classes = 2
 
 train_dir = data_path + 'train/'
 # Cropped set: train_cropped & test_cropped
 # Full set: train & test
 test_dir = data_path + 'test/'
 train_push_dir = data_path + 'train/'
-train_batch_size = 80
+train_batch_size = 32
 test_batch_size = 100
 train_push_batch_size = 75
 
@@ -61,3 +61,4 @@ num_secondary_warm_epochs = 5
 push_start = 20
 
 push_epochs = [i for i in range(num_train_epochs) if i % 10 == 0]
+
