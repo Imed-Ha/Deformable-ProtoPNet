@@ -6,7 +6,7 @@ experiment_run = '001'
 # Full set: './datasets/CUB_200_2011/'
 # Cropped set: './datasets/cub200_cropped/'
 # Stanford dogs: './datasets/stanford_dogs/'
-data_path = './datasets/CUB_200_2011/'
+data_path = './datasets/glaucoma_dataset/'
 #120 classes in stanford_dogs, 200 in CUB_200_2011
 if 'stanford_dogs' in data_path:
     num_classes = 120
@@ -18,7 +18,7 @@ train_dir = data_path + 'train/'
 # Full set: train & test
 test_dir = data_path + 'test/'
 train_push_dir = data_path + 'train/'
-train_batch_size = 32
+train_batch_size = 80
 test_batch_size = 100
 train_push_batch_size = 75
 
@@ -61,4 +61,3 @@ num_secondary_warm_epochs = 5
 push_start = 20
 
 push_epochs = [i for i in range(num_train_epochs) if i % 10 == 0]
-
