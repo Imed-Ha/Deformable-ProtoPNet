@@ -255,7 +255,7 @@ def resnet34_features(pretrained=False, **kwargs):
     return model
 
 
-def resnet50_features(pretrained=False, inat=True, **kwargs):
+def resnet50_features(pretrained=False, inat=False, **kwargs):
     """Constructs a ResNet-50 model.
     Args:
         pretrained (bool): If True, returns a pre-trained model
